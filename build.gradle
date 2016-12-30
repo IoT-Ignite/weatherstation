@@ -26,6 +26,10 @@ buildscript {
     }
 }
 
+plugins {
+    id "org.sonarqube" version "2.0.1"
+}
+
 allprojects {
     repositories {
         jcenter()
@@ -34,4 +38,24 @@ allprojects {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+sonarqube {
+    properties {
+        property "sonar.sourceEncoding", "UTF-8"
+        property "sonar.sources", "src"
+        property "sonar.projectName","weatherstation"
+        property "sonar.projectVersion","1.0"
+    }
+}
+
+subprojects {
+    sonarqube {
+        properties {
+            property "sonar.sourceEncoding", "UTF-8"
+            property "sonar.sources", "src"
+            property "sonar.projectName","SampleIotIgniteProject"
+            property "sonar.projectVersion","1.0"
+        }
+    }
 }

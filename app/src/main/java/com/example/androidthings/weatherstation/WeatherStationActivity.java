@@ -77,6 +77,7 @@ public class WeatherStationActivity extends Activity {
 
     private PubsubPublisher mPubsubPublisher;
     private ImageView mImageView;
+    private IoTIgniteHandler mIotIgniteHandler;
 
     // Callback used when we register the BMP280 sensor driver with the system's SensorManager.
     private SensorManager.DynamicSensorCallback mDynamicSensorCallback
@@ -91,6 +92,9 @@ public class WeatherStationActivity extends Activity {
                     mSensorManager.registerListener(mPubsubPublisher.getTemperatureListener(), sensor,
                             SensorManager.SENSOR_DELAY_NORMAL);
                 }
+                if(mIotIgniteHandler != null) {
+                    mSensorManager.registerListener(mIotIgniteHandler.getTemperatureListener(), sensor, SensorManager.SENSOR_DELAY_NORMAL);
+                }
             } else if (sensor.getType() == Sensor.TYPE_PRESSURE) {
                 // Our sensor is connected. Start receiving pressure data.
                 mSensorManager.registerListener(mPressureListener, sensor,
@@ -98,6 +102,9 @@ public class WeatherStationActivity extends Activity {
                 if (mPubsubPublisher != null) {
                     mSensorManager.registerListener(mPubsubPublisher.getPressureListener(), sensor,
                             SensorManager.SENSOR_DELAY_NORMAL);
+                }
+                if(mIotIgniteHandler != null) {
+                    mSensorManager.registerListener(mIotIgniteHandler.getPressureListener(), sensor, SensorManager.SENSOR_DELAY_NORMAL);
                 }
             }
         }
@@ -113,7 +120,7 @@ public class WeatherStationActivity extends Activity {
         @Override
         public void onSensorChanged(SensorEvent event) {
             mLastTemperature = event.values[0];
-            Log.d(TAG, "sensor changed: " + mLastTemperature);
+            Log.d(TAG, "Temperature sensor changed: " + mLastTemperature);
             if (mDisplayMode == DisplayMode.TEMPERATURE) {
                 updateDisplay(mLastTemperature);
             }
@@ -130,7 +137,7 @@ public class WeatherStationActivity extends Activity {
         @Override
         public void onSensorChanged(SensorEvent event) {
             mLastPressure = event.values[0];
-            Log.d(TAG, "sensor changed: " + mLastPressure);
+            Log.d(TAG, "Pressure sensor changed: " + mLastPressure);
             if (mDisplayMode == DisplayMode.PRESSURE) {
                 updateDisplay(mLastPressure);
             }
@@ -152,6 +159,10 @@ public class WeatherStationActivity extends Activity {
         mImageView = (ImageView) findViewById(R.id.imageView);
 
         mSensorManager = ((SensorManager) getSystemService(SENSOR_SERVICE));
+
+        mIotIgniteHandler = new IoTIgniteHandler(this, getApplicationContext());
+        mIotIgniteHandler.start();
+
 
         // GPIO button that generates 'A' keypresses (handled by onKeyUp method)
         try {
@@ -264,6 +275,7 @@ public class WeatherStationActivity extends Activity {
                 Log.e(TAG, "error creating pubsub publisher", e);
             }
         }
+
     }
 
     @Override
@@ -365,6 +377,10 @@ public class WeatherStationActivity extends Activity {
             mSensorManager.unregisterListener(mPubsubPublisher.getPressureListener());
             mPubsubPublisher.close();
             mPubsubPublisher = null;
+        }
+
+        if(mIotIgniteHandler != null) {
+            mIotIgniteHandler.stop();
         }
     }
 

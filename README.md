@@ -41,6 +41,7 @@ If you have everything set up correctly:
 - If a Piezo Buzzer is connected, it will plays a funny sound on startup.
 - If a APA102 RGB Led strip is connected, it will display a rainbow of 7 pixels indicating the current pressure.
 - If a Google Cloud Platform project is configured (see instruction below), it will publish the sensor data to Google Cloug PubSub.
+- If you register to IoT-Ignite Devzone and define the configurations it will publish the sensor data to IoT-Ignite Platform. Then you can define CEP rules and see the results.
 
 Google Cloud Platform configuration (optional)
 ==============================================
@@ -68,6 +69,46 @@ Now your weather sensor data is continuously being published to [Google Cloud Pu
 - persist weather data in [Google Cloud Bigtable](https://cloud.google.com/bigtable/) or [BigQuery](https://cloud.google.com/bigquery/)
 - create some weather visualization with [Google Cloud Datalab](https://cloud.google.com/datalab/)
 - build weather prediction model with [Google Cloud Machine Learning](https://cloud.google.com/ml/)
+
+IoT-Ignite Integration
+======================
+
+IoT-Ignite is a Platform as a Service (PaaS) distinctively designed for realization of Internet of Things. It provides a secure, reliable gateway connection between your devices and the web and allows you to manage your devices, data flow, data streaming and rule definitions.
+
+In order to connect your hardware or device to IoT-Ignite platform, IoT-Ignite device SDK is used. This work here demonstrates to create an application development using IoT-Ignite SDK. For this purpose, on android studio "repositories" and "dependencies" part under the build.gradle file are created as below;
+
+```
+repositories {
+ mavenCentral()
+ maven {
+     url "https://repo.iot-ignite.com/content/repositories/releases"
+ }
+}
+
+dependencies {
+ compile 'com.ardic.android:IoTIgnite:0.7'
+ compile 'com.google.code.gson:gson:2.7'
+}
+```
+
+In addition, below part should be discarded from AndroidManifest.xml file to use Ignite Agent application which  provides connection with Ignite Cloud;
+
+```
+<!-- Launch activity automatically on boot -->
+    <intent-filter>
+          <action android:name="android.intent.action.MAIN"/>
+          <category android:name="android.intent.category.IOT_LAUNCHER"/>
+          <category android:name="android.intent.category.DEFAULT"/>
+    </intent-filter>
+```
+Next Steps
+======================
+
+Sensor data configuration; Data Reading, sending to cloud, keeping offline data etc configurations can be defined as follows.
+![Pressure Configuration](sensordata_configuration.png)
+
+CEP Rule; You can define the CEP rules from devzone area as below. After events are occurred given actions are taken.
+![Pressure Configuration](CEP_rule.png)
 
 License
 -------
