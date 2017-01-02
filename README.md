@@ -101,14 +101,26 @@ In addition, below part should be discarded from AndroidManifest.xml file to use
           <category android:name="android.intent.category.DEFAULT"/>
     </intent-filter>
 ```
+
 Next Steps
 ======================
 
-Sensor data configuration; Data Reading, sending to cloud, keeping offline data etc configurations can be defined as follows.
+Sensor data configuration; Data Reading, sending to cloud, keeping offline data, etc. configurations can be defined as follows.
+
 ![Pressure Configuration](sensordata_configuration.png)
 
-CEP Rule; You can define the CEP rules from devzone area as below. After events are occurred given actions are taken.
+CEP Rule; You can define the CEP (Complex Event Processing) rules from IoT-Ignite Devzone  as below. After events are occurred given actions are taken.
+
+The example IoT-Ignite Cloud CEP Flow is defined as follows; When the reading pressure data is between 980hPa and 1000hPa then ring another IoT-Ignite connected gateway and show a given message like "Typical Low Pressure System" on the screen.
+
 ![Pressure Configuration](CEP_rule.png)
+
+For more information about IoT-Ignite please visit [https://www.iot-ignite.com](https://www.iot-ignite.com)
+
+IoT-Ignite Devzone
+[https://devzone.iot-ignite.com/](https://devzone.iot-ignite.com/)
+
+IoT-Ignite API reference [https://devzone.iot-ignite.com/device-api/iot-ignite/reference/](https://devzone.iot-ignite.com/device-api/iot-ignite/reference/)
 
 License
 -------
